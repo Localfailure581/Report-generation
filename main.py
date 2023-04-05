@@ -57,5 +57,5 @@ def main():
           f"Used from NVS savings: ${amount_used:.2f}\n"
           f"Current savings: ${current_savings:.2f}")
 
-    if __name__ == '__main__':
-        main()
+if __name__ == '__main__':
+    main()
