@@ -1,5 +1,9 @@
+import datetime
+import os
+
 import db
 import models
+
 
 def get_float_input(prompt):
     while True:
@@ -9,6 +13,7 @@ def get_float_input(prompt):
             return value
         except ValueError:
             print("Invalid input. Please enter a number.")
+
 
 def main():
     print("Welcome to funding report creator, a process created to generate funding reports based on user input via terminal")
@@ -51,11 +56,19 @@ def main():
     db.insert_savings(current_savings)
 
     # Print the report
-    print(f"NVS February funding\n"
-          f"+${income:.2f} incoming (patrons)\n"
-          f"-${total_expenses:.2f} total expenses\n"
-          f"Used from NVS savings: ${amount_used:.2f}\n"
-          f"Current savings: ${current_savings:.2f}")
+    report = (f"NVS February funding\n"
+              f"+${income:.2f} incoming (patrons)\n"
+              f"-${total_expenses:.2f} total expenses\n"
+              f"Used from NVS savings: ${amount_used:.2f}\n"
+              f"Current savings: ${current_savings:.2f}")
+    print(report)
 
-if __name__ == '__main__':
-    main()
+    # Save the report to a file with a timestamp in the file name
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    filename = f"archives/funding_report_{timestamp}.txt"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w") as file:
+        file.write(report)
+
+    # Move the report to the archives folder
+    shutil.move(filename, "archives")
